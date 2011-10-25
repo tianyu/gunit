@@ -51,6 +51,10 @@ void True(bool expr, char const*msg = NULL);
 
 void False(bool expr, char const*msg = NULL);
 
+void Null(void *prt, char const*msg = NULL);
+
+void NotNull(void *prt, char const*msg = NULL);
+
 template<typename T1, typename T2>
 void Equal(T1 expected, T2 tested, char const*msg = NULL);
 

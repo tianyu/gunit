@@ -1,11 +1,12 @@
-#include "q1upp.h"
-#include "q1gunit.h"
+#include "upp.h"
+#include "gunit.h"
 #include <iostream>
 #include <iomanip>
 #include <vector>
 #include <cstdarg>
 #include <cstdio>
 #include <exception>
+#include <auto_ptr.h>
 
 using namespace std;
 
@@ -87,12 +88,22 @@ void Fail(char const*msg, char const*format, ...) {
 
 void True(bool expr, const char *msg) {
     if (expr) return;
-    Fail(msg, "%s", "Expected true but was false");
+    Fail(msg, "Expected true but was false");
 }
 
 void False(bool expr, const char *msg) {
     if (!expr) return;
-    Fail(msg, "%s", "Expected false but was true");
+    Fail(msg, "Expected false but was true");
+}
+
+void Null(void *ptr, const char *msg) {
+    if (ptr == NULL) return;
+    Fail(msg, "Expected NULL, got 0x%x", ptr);
+}
+
+void NotNull(void *ptr, const char *msg) {
+    if (ptr) return;
+    Fail(msg, "Expected NOT NULL, got 0x%x", ptr);
 }
 
 template<>
@@ -107,7 +118,7 @@ void Equal<char const*, char const*>
 (char const*expected, char const*tested, char const*msg) {
     if (expected == tested) return;
     if (expected == NULL || tested == NULL) goto fail;
-    for (const char *e = expected, *t = tested; *e && *t;)
+    for (const char *e = expected, *t = tested; *e || *t;)
         if (*e++ != *t++) goto fail;
     return;
 
